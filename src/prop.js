@@ -42,7 +42,8 @@ export default function prop(value) {
      * Does the type of the internal value
      * match the provided type
      *
-     * @return {String}
+     * @param {String} type
+     * @return {Boolean}
      * @api public
      */
     prop.is = function is(type) {
