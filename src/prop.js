@@ -39,6 +39,17 @@ export default function prop(value) {
     };
 
     /**
+     * Does the type of the internal value
+     * match the provided type
+     *
+     * @return {String}
+     * @api public
+     */
+    prop.is = function is(type) {
+        return this.type(value) === type.toLowerCase();
+    };
+
+    /**
      * Return the getter/setter function
      */
     return prop;

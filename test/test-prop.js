@@ -42,4 +42,27 @@ describe('prop', () => {
         foo(void 0);
         expect(foo.type()).to.equal('undefined', 'should detect undefined');
     });
+
+    it('should support comparing the type of the internal variable against a provided type', () => {
+        const foo = prop('foo');
+        expect(foo.is('string')).to.equal(true, 'should detect strings');
+        foo(1);
+        expect(foo.is('number')).to.equal(true, 'should detect numbers');
+        foo(true);
+        expect(foo.is('boolean')).to.equal(true, 'should detect booleans');
+        foo([]);
+        expect(foo.is('array')).to.equal(true, 'should detect arrays');
+        foo({});
+        expect(foo.is('object')).to.equal(true, 'should detect objects');
+        foo(() => {});
+        expect(foo.is('function')).to.equal(true, 'should detect functions');
+        foo(/foo/);
+        expect(foo.is('regexp')).to.equal(true, 'should detect regular expressions');
+        foo(new Date());
+        expect(foo.is('date')).to.equal(true, 'should detect dates');
+        foo(null);
+        expect(foo.is('null')).to.equal(true, 'should detect null');
+        foo(void 0);
+        expect(foo.is('undefined')).to.equal(true, 'should detect undefined');
+    });
 });
