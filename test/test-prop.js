@@ -65,4 +65,17 @@ describe('prop', () => {
         foo(void 0);
         expect(foo.is('undefined')).to.equal(true, 'should detect undefined');
     });
+
+    it('should support strict equality comparison to a provided object', () => {
+        const foo = prop('foo');
+        expect(foo.equals('foo')).to.equal(true);
+        expect(foo.equals('bar')).to.equal(false);
+        expect(foo.equals(false)).to.equal(false);
+    });
+
+    it('should support nullifying the internal variable', () => {
+        const foo = prop('foo');
+        foo.release();
+        expect(foo()).to.equal(null);
+    });
 });

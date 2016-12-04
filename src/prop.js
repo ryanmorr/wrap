@@ -39,8 +39,8 @@ export default function prop(value) {
     };
 
     /**
-     * Does the type of the internal value
-     * match the provided type
+     * Check if the type of the internal value
+     * matches the provided type
      *
      * @param {String} type
      * @return {Boolean}
@@ -48,6 +48,27 @@ export default function prop(value) {
      */
     prop.is = function is(type) {
         return this.type(value) === type.toLowerCase();
+    };
+
+    /**
+     * Check if the internal value is strictly
+     * equal to the provided object
+     *
+     * @param {*} obj
+     * @return {Boolean}
+     * @api public
+     */
+    prop.equals = function equals(obj) {
+        return value === obj;
+    };
+
+    /**
+     * Nullify the internal value
+     *
+     * @api public
+     */
+    prop.release = function release() {
+        value = null;
     };
 
     /**
