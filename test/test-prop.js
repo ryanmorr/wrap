@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 
 import { expect } from 'chai';
+import sinon from 'sinon';
 import prop from '../src/prop';
 
 describe('prop', () => {
@@ -85,5 +86,16 @@ describe('prop', () => {
         expect(json).to.equal('{"foo":1,"bar":2}');
         expect(JSON.parse(json)).to.deep.equal({foo: 1, bar: 2});
         expect(JSON.stringify(obj)).to.equal(JSON.stringify(json), 'JSON.stringify should use toJSON method');
+    });
+
+    it('should support observing changes to the internal variable', () => {
+        const str = prop('foo');
+        const newValue = 'bar';
+        const fn = (value) => expect(value).to.equal(newValue);
+        const spy = sinon.spy(fn);
+        str.observe(spy);
+        str.observe(spy);
+        str(newValue);
+        expect(spy.calledTwice).to.equal(true);
     });
 });

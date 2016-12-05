@@ -12,6 +12,8 @@ const toString = {}.toString;
  * @api public
  */
 export default function prop(value) {
+    const listeners = [];
+
     /**
      * Get the value by passing no arguments,
      * or set the internal value by passing a
@@ -24,6 +26,7 @@ export default function prop(value) {
     function prop(...args) {
         if (args.length) {
             value = args[0];
+            listeners.forEach((fn) => fn(value));
         }
         return value;
     }
@@ -79,6 +82,17 @@ export default function prop(value) {
      */
     prop.toJSON = function toJSON() {
         return JSON.stringify(value);
+    };
+
+    /**
+     * Add a callback function to be invoked
+     * everytime the internal value is changed
+     *
+     * @param {Function} fn
+     * @api public
+     */
+    prop.observe = function observe(fn) {
+        listeners.push(fn);
     };
 
     /**
