@@ -98,4 +98,15 @@ describe('prop', () => {
         str(newValue);
         expect(spy.calledTwice).to.equal(true);
     });
+
+    it('should support encoding the internal variable into a hashcode (integer representation)', () => {
+        const example1 = prop({foo: 1, bar: 2});
+        const example2 = prop({foo: 1, bar: 2});
+        const example3 = prop({foo: 1, bar: 3});
+        const code = example2.hashCode();
+        expect(example1.hashCode()).to.be.a('number');
+        expect(isFinite(code) && code % 1).to.equal(0);
+        expect(example1.hashCode()).to.equal(example2.hashCode());
+        expect(example1.hashCode()).to.not.equal(example3.hashCode());
+    });
 });

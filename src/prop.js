@@ -4,6 +4,51 @@
 const toString = {}.toString;
 
 /**
+ * Get the internal [[Class]] of an object
+ *
+ * @param {*} obj
+ * @return {String}
+ * @api private
+ */
+function getType(obj) {
+    return toString.call(obj).slice(8, -1).toLowerCase();
+}
+
+/**
+ * Generate a hash code for an object
+ * based on its value/indexed items/properties
+ *
+ * @param {*} obj
+ * @return {Number}
+ * @api private
+ */
+function getHashCode(obj) {
+    let hash = 0;
+    const type = getType(obj);
+    switch (type) {
+        case 'null':
+        case 'undefined':
+            return 0;
+        case 'array':
+            for (let i = 0, len = obj.length; i < len; i++) {
+                hash += getHashCode(i + getHashCode(obj[i]));
+            }
+            return hash;
+        case 'object':
+            for (const prop in obj) {
+                hash += getHashCode(prop + getHashCode(obj[prop]));
+            }
+            return hash;
+        default:
+            const str = obj.toString();
+            for (let i = 0, len = str.length; i < len; i++) {
+                hash = (((hash << 5) - hash) + str.charCodeAt(i)) & 0xFFFFFFFF;
+            }
+            return hash;
+    }
+}
+
+/**
  * Wrap a variable to provide abstracted
  * utilities
  *
@@ -38,7 +83,7 @@ export default function prop(value) {
      * @api public
      */
     prop.type = function type() {
-        return toString.call(value).slice(8, -1).toLowerCase();
+        return getType(value);
     };
 
     /**
@@ -93,6 +138,17 @@ export default function prop(value) {
      */
     prop.observe = function observe(fn) {
         listeners.push(fn);
+    };
+
+    /**
+     * Generate a unique hash code for the
+     * internal value
+     *
+     * @return {Number}
+     * @api public
+     */
+    prop.hashCode = function hashCode() {
+        return getHashCode(value);
     };
 
     /**
