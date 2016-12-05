@@ -78,4 +78,12 @@ describe('prop', () => {
         foo.release();
         expect(foo()).to.equal(null);
     });
+
+    it('should support converting the internal variable to JSON', () => {
+        const obj = prop({foo: 1, bar: 2});
+        const json = obj.toJSON();
+        expect(json).to.equal('{"foo":1,"bar":2}');
+        expect(JSON.parse(json)).to.deep.equal({foo: 1, bar: 2});
+        expect(JSON.stringify(obj)).to.equal(JSON.stringify(json), 'JSON.stringify should use toJSON method');
+    });
 });

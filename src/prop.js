@@ -72,6 +72,16 @@ export default function prop(value) {
     };
 
     /**
+     * Convert the internal value to a JSON
+     * string
+     *
+     * @api public
+     */
+    prop.toJSON = function toJSON() {
+        return JSON.stringify(value);
+    };
+
+    /**
      * Return the getter/setter function
      */
     return prop;
