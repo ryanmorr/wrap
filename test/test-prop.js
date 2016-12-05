@@ -109,4 +109,10 @@ describe('prop', () => {
         expect(example1.hashCode()).to.equal(example2.hashCode());
         expect(example1.hashCode()).to.not.equal(example3.hashCode());
     });
+
+    it('should support assertions on the internal variable', () => {
+        const foo = prop(10);
+        expect(foo.assert((val) => val === 10)).to.equal(true);
+        expect(foo.assert((val) => val === 11)).to.equal(false);
+    });
 });

@@ -152,6 +152,18 @@ export default function prop(value) {
     };
 
     /**
+     * Check if the internal value passes or
+     * fails a condition
+     *
+     * @param {Function} fn
+     * @return {Boolean}
+     * @api public
+     */
+    prop.assert = function assert(fn) {
+        return fn(value);
+    };
+
+    /**
      * Return the getter/setter function
      */
     return prop;
