@@ -116,7 +116,7 @@ export default function prop(value) {
      * @api public
      */
     prop.release = function release() {
-        value = null;
+        prop(null);
     };
 
     /**
