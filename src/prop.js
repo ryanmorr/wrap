@@ -182,7 +182,7 @@ export default function prop(value) {
      * @return {Number}
      * @api public
      */
-    prop.valueOf = function toString() {
+    prop.valueOf = function valueOf() {
         return this.hashCode();
     };
 
