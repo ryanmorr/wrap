@@ -164,6 +164,29 @@ export default function prop(value) {
     };
 
     /**
+     * Return a string representation for the
+     * internal value
+     *
+     * @return {String}
+     * @api public
+     */
+    prop.toString = function toString() {
+        return value.toString();
+    };
+
+    /**
+     * Return an integer representation when
+     * the internal value is converted to a
+     * primitive
+     *
+     * @return {Number}
+     * @api public
+     */
+    prop.valueOf = function toString() {
+        return this.hashCode();
+    };
+
+    /**
      * Return the getter/setter function
      */
     return prop;

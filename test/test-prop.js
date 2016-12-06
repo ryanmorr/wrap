@@ -115,4 +115,17 @@ describe('prop', () => {
         expect(foo.assert((val) => val === 10)).to.equal(true);
         expect(foo.assert((val) => val === 11)).to.equal(false);
     });
+
+    it('should support converting the prop to a string representation of the internal variable', () => {
+        const foo = prop('foo');
+        expect(foo.toString()).to.equal('foo');
+    });
+
+    it('should support primitive coercion', () => {
+        const foo = prop(10);
+        const code = foo.hashCode();
+        expect(foo.valueOf()).to.equal(code);
+        expect(Number(foo)).to.equal(code);
+        expect(foo + 0).to.equal(code);
+    });
 });
