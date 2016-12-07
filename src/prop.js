@@ -164,6 +164,17 @@ export default function prop(value) {
     };
 
     /**
+     * Return an identical clone of the
+     * internal value
+     *
+     * @return {Boolean}
+     * @api public
+     */
+    prop.clone = function clone() {
+        return JSON.parse(JSON.stringify(value));
+    };
+
+    /**
      * Return a string representation for the
      * internal value
      *

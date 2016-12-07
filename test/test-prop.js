@@ -116,6 +116,14 @@ describe('prop', () => {
         expect(foo.assert((val) => val === 11)).to.equal(false);
     });
 
+    it('should support cloning the internal variable', () => {
+        const obj = {foo: 123, bar: {baz: true, qux: 'aaa'}};
+        const foo = prop(obj);
+        const clone = foo.clone();
+        expect(clone === obj).to.equal(false);
+        expect(clone).to.deep.equal(obj);
+    });
+
     it('should support converting the prop to a string representation of the internal variable', () => {
         const foo = prop('foo');
         expect(foo.toString()).to.equal('foo');
