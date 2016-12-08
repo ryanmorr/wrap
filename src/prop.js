@@ -175,6 +175,30 @@ export default function prop(value) {
     };
 
     /**
+     * Log a message to the console
+     *
+     * @param {String} msg
+     * @api public
+     */
+    prop.log = function log(msg) {
+        /* eslint-disable no-console */
+        if (console && console.log) {
+            console.log(value, msg);
+        }
+        /* eslint-enable no-console */
+    };
+
+    /**
+     * Throw an error
+     *
+     * @param {String} msg
+     * @api public
+     */
+    prop.error = function error(msg) {
+        throw new Error(msg);
+    };
+
+    /**
      * Return a string representation for the
      * internal value
      *

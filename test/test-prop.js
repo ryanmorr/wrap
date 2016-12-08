@@ -124,6 +124,26 @@ describe('prop', () => {
         expect(clone).to.deep.equal(obj);
     });
 
+    it('should support logging to the console', () => {
+        const msg = 'test';
+        const str = 'foo';
+        const foo = prop(str);
+        const stub = sinon.stub(console, 'log');
+        foo.log(msg);
+        expect(stub.calledOnce).to.equal(true);
+        expect(stub.calledWith(str, msg)).to.equal(true);
+        stub.restore();
+    });
+
+    it('should support throwing errors', () => {
+        const msg = 'error';
+        const foo = prop('foo');
+        const error = () => {
+            foo.error(msg);
+        };
+        expect(error).to.throw(Error, msg);
+    });
+
     it('should support converting the prop to a string representation of the internal variable', () => {
         const foo = prop('foo');
         expect(foo.toString()).to.equal('foo');
