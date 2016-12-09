@@ -5,65 +5,60 @@ import sinon from 'sinon';
 import prop from '../src/prop';
 
 describe('prop', () => {
-    it('should support wrapping a variable in the prop utility', () => {
-        const foo = prop('foo');
-        expect(foo).to.be.a('function');
-    });
-
     it('should support reading the internal variable', () => {
         const foo = prop('foo');
-        expect(foo()).to.equal('foo');
+        expect(foo.get()).to.equal('foo');
     });
 
     it('should support setting the internal variable', () => {
         const foo = prop('foo');
-        expect(foo('bar')).to.equal('bar');
-        expect(foo()).to.equal('bar');
+        foo.set('bar');
+        expect(foo.get()).to.equal('bar');
     });
 
     it('should support retrieving the type of the internal variable', () => {
         const foo = prop('foo');
         expect(foo.type()).to.equal('string', 'should detect strings');
-        foo(1);
+        foo.set(1);
         expect(foo.type()).to.equal('number', 'should detect numbers');
-        foo(true);
+        foo.set(true);
         expect(foo.type()).to.equal('boolean', 'should detect booleans');
-        foo([]);
+        foo.set([]);
         expect(foo.type()).to.equal('array', 'should detect arrays');
-        foo({});
+        foo.set({});
         expect(foo.type()).to.equal('object', 'should detect objects');
-        foo(() => {});
+        foo.set(() => {});
         expect(foo.type()).to.equal('function', 'should detect functions');
-        foo(/foo/);
+        foo.set(/foo/);
         expect(foo.type()).to.equal('regexp', 'should detect regular expressions');
-        foo(new Date());
+        foo.set(new Date());
         expect(foo.type()).to.equal('date', 'should detect dates');
-        foo(null);
+        foo.set(null);
         expect(foo.type()).to.equal('null', 'should detect null');
-        foo(void 0);
+        foo.set(void 0);
         expect(foo.type()).to.equal('undefined', 'should detect undefined');
     });
 
     it('should support comparing the type of the internal variable against a provided type', () => {
         const foo = prop('foo');
         expect(foo.is('string')).to.equal(true, 'should detect strings');
-        foo(1);
+        foo.set(1);
         expect(foo.is('number')).to.equal(true, 'should detect numbers');
-        foo(true);
+        foo.set(true);
         expect(foo.is('boolean')).to.equal(true, 'should detect booleans');
-        foo([]);
+        foo.set([]);
         expect(foo.is('array')).to.equal(true, 'should detect arrays');
-        foo({});
+        foo.set({});
         expect(foo.is('object')).to.equal(true, 'should detect objects');
-        foo(() => {});
+        foo.set(() => {});
         expect(foo.is('function')).to.equal(true, 'should detect functions');
-        foo(/foo/);
+        foo.set(/foo/);
         expect(foo.is('regexp')).to.equal(true, 'should detect regular expressions');
-        foo(new Date());
+        foo.set(new Date());
         expect(foo.is('date')).to.equal(true, 'should detect dates');
-        foo(null);
+        foo.set(null);
         expect(foo.is('null')).to.equal(true, 'should detect null');
-        foo(void 0);
+        foo.set(void 0);
         expect(foo.is('undefined')).to.equal(true, 'should detect undefined');
     });
 
@@ -77,7 +72,7 @@ describe('prop', () => {
     it('should support nullifying the internal variable', () => {
         const foo = prop('foo');
         foo.release();
-        expect(foo()).to.equal(null);
+        expect(foo.get()).to.equal(null);
     });
 
     it('should support converting the internal variable to JSON', () => {
@@ -95,7 +90,7 @@ describe('prop', () => {
         const spy = sinon.spy(fn);
         str.observe(spy);
         str.observe(spy);
-        str(newValue);
+        str.set(newValue);
         expect(spy.calledTwice).to.equal(true);
     });
 

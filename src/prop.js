@@ -49,31 +49,47 @@ function getHashCode(obj) {
 }
 
 /**
- * Wrap a variable to provide abstracted
- * utilities
+ * Helper class that wraps a variable to provide
+ * abstracted utilities
  *
- * @param {*} value (optional)
- * @return {Function}
+ * @class Prop
  * @api public
  */
-export default function prop(value) {
-    const listeners = [];
+class Prop {
 
     /**
-     * Get the value by passing no arguments,
-     * or set the internal value by passing a
-     * value
+     * Instantiate the class and provide
+     * the variable to wrap
      *
-     * @param {*} value (optional)
+     * @param {*} value
+     * @api public
+     */
+    constructor(value) {
+        this.value = value;
+        this.listeners = [];
+    }
+
+    /**
+     * Set the internal value
+     *
+     * @param {*} value
+     * @api public
+     */
+    set(...args) {
+        if (args.length) {
+            this.value = args[0];
+            this.listeners.forEach((fn) => fn(this.value));
+        }
+    }
+
+    /**
+     * Get the internal value
+     *
      * @return {*}
      * @api public
      */
-    function prop(...args) {
-        if (args.length) {
-            value = args[0];
-            listeners.forEach((fn) => fn(value));
-        }
-        return value;
+    get(...args) {
+        return this.value;
     }
 
     /**
@@ -82,9 +98,9 @@ export default function prop(value) {
      * @return {String}
      * @api public
      */
-    prop.type = function type() {
-        return getType(value);
-    };
+    type() {
+        return getType(this.value);
+    }
 
     /**
      * Check if the type of the internal value
@@ -94,9 +110,9 @@ export default function prop(value) {
      * @return {Boolean}
      * @api public
      */
-    prop.is = function is(type) {
-        return this.type(value) === type.toLowerCase();
-    };
+    is(type) {
+        return this.type(this.value) === type.toLowerCase();
+    }
 
     /**
      * Check if the internal value is strictly
@@ -106,18 +122,18 @@ export default function prop(value) {
      * @return {Boolean}
      * @api public
      */
-    prop.equals = function equals(obj) {
-        return value === obj;
-    };
+    equals(obj) {
+        return this.value === obj;
+    }
 
     /**
      * Nullify the internal value
      *
      * @api public
      */
-    prop.release = function release() {
-        prop(null);
-    };
+    release() {
+        this.set(null);
+    }
 
     /**
      * Convert the internal value to a JSON
@@ -125,9 +141,9 @@ export default function prop(value) {
      *
      * @api public
      */
-    prop.toJSON = function toJSON() {
-        return JSON.stringify(value);
-    };
+    toJSON() {
+        return JSON.stringify(this.value);
+    }
 
     /**
      * Add a callback function to be invoked
@@ -136,9 +152,9 @@ export default function prop(value) {
      * @param {Function} fn
      * @api public
      */
-    prop.observe = function observe(fn) {
-        listeners.push(fn);
-    };
+    observe(fn) {
+        this.listeners.push(fn);
+    }
 
     /**
      * Generate a unique hash code for the
@@ -147,9 +163,9 @@ export default function prop(value) {
      * @return {Number}
      * @api public
      */
-    prop.hashCode = function hashCode() {
-        return getHashCode(value);
-    };
+    hashCode() {
+        return getHashCode(this.value);
+    }
 
     /**
      * Check if the internal value passes or
@@ -159,9 +175,9 @@ export default function prop(value) {
      * @return {Boolean}
      * @api public
      */
-    prop.assert = function assert(fn) {
-        return fn(value);
-    };
+    assert(fn) {
+        return fn(this.value);
+    }
 
     /**
      * Return an identical clone of the
@@ -170,9 +186,9 @@ export default function prop(value) {
      * @return {Boolean}
      * @api public
      */
-    prop.clone = function clone() {
-        return JSON.parse(JSON.stringify(value));
-    };
+    clone() {
+        return JSON.parse(JSON.stringify(this.value));
+    }
 
     /**
      * Log a message to the console
@@ -180,13 +196,13 @@ export default function prop(value) {
      * @param {String} msg
      * @api public
      */
-    prop.log = function log(msg) {
+    log(msg) {
         /* eslint-disable no-console */
         if (console && console.log) {
-            console.log(value, msg);
+            console.log(this.value, msg);
         }
         /* eslint-enable no-console */
-    };
+    }
 
     /**
      * Throw an error
@@ -194,9 +210,9 @@ export default function prop(value) {
      * @param {String} msg
      * @api public
      */
-    prop.error = function error(msg) {
+    error(msg) {
         throw new Error(msg);
-    };
+    }
 
     /**
      * Return a string representation for the
@@ -205,9 +221,9 @@ export default function prop(value) {
      * @return {String}
      * @api public
      */
-    prop.toString = function toString() {
-        return value.toString();
-    };
+    toString() {
+        return this.value.toString();
+    }
 
     /**
      * Return an integer representation when
@@ -217,12 +233,19 @@ export default function prop(value) {
      * @return {Number}
      * @api public
      */
-    prop.valueOf = function valueOf() {
+    valueOf() {
         return this.hashCode();
-    };
+    }
+}
 
-    /**
-     * Return the getter/setter function
-     */
-    return prop;
+/**
+ * Wrap a variable to provide abstracted
+ * utilities
+ *
+ * @param {*} value (optional)
+ * @return {Prop}
+ * @api public
+ */
+export default function prop(value) {
+    return new Prop(value);
 }
