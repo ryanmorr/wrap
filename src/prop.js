@@ -34,18 +34,16 @@ class Prop {
      * @param {*} value
      * @api public
      */
-    set(...args) {
-        if (args.length) {
-            this.value = args[0];
-            const type = this.type(this.value);
-            if (supportsIterator
-                && !(Symbol.iterator in this)
-                && (type === 'array' || type === 'object')) {
-                this[Symbol.iterator] = getIterator(this.value, type);
-            }
-            if ('listeners' in this) {
-                this.listeners.forEach((fn) => fn(this.value));
-            }
+    set(value) {
+        this.value = value;
+        const type = this.type(value);
+        if (supportsIterator
+            && !(Symbol.iterator in this)
+            && (type === 'array' || type === 'object')) {
+            this[Symbol.iterator] = getIterator(value, type);
+        }
+        if ('listeners' in this) {
+            this.listeners.forEach((fn) => fn(value));
         }
     }
 
