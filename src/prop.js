@@ -50,6 +50,46 @@ function getHashCode(obj) {
 }
 
 /**
+ * Get an iterator function for an array or
+ * object
+ *
+ * @param {Array|Object} value
+ * @param {String} type
+ * @return {Function}
+ * @api private
+ */
+function getIterator(value, type) {
+    if (type === 'array') {
+        return () => {
+            let index = 0;
+            const length = value.length;
+            return {
+                next() {
+                    if (index < length) {
+                        return {value: value[index++]};
+                    }
+                    return {done: true};
+                }
+            };
+        };
+    }
+    return () => {
+        let index = 0;
+        const items = Object.keys(value);
+        const length = items.length;
+        return {
+            next() {
+                if (index < length) {
+                    const key = items[index++];
+                    return {value: [key, value[key]]};
+                }
+                return {done: true};
+            }
+        };
+    };
+}
+
+/**
  * Helper class that wraps a variable to provide
  * abstracted utilities
  *
@@ -80,27 +120,10 @@ class Prop {
         if (args.length) {
             this.value = args[0];
             const type = this.type(this.value);
-            if (supportsIterator && (type === 'array' || type === 'object')) {
-                this[Symbol.iterator] = () => {
-                    const value = this.value;
-                    const items = type === 'array' ? value : Object.keys(value);
-                    const length = items.length;
-                    let index = 0;
-                    return {
-                        next() {
-                            if (index < length) {
-                                if (type === 'array') {
-                                    return {value: items[index++]};
-                                } else {
-                                    const key = items[index++];
-                                    return {value: [key, value[key]]};
-                                }
-                            } else {
-                                return {done: true};
-                            }
-                        }
-                    };
-                }
+            if (supportsIterator
+                && !(Symbol.iterator in this)
+                && (type === 'array' || type === 'object')) {
+                this[Symbol.iterator] = getIterator(this.value, type);
             }
             this.listeners.forEach((fn) => fn(this.value));
         }
@@ -112,7 +135,7 @@ class Prop {
      * @return {*}
      * @api public
      */
-    get(...args) {
+    get() {
         return this.value;
     }
 
