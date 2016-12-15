@@ -26,6 +26,7 @@ class Prop {
      */
     constructor(value) {
         this.set(value);
+        this.debugging = false;
     }
 
     /**
@@ -35,6 +36,9 @@ class Prop {
      * @api public
      */
     set(value) {
+        if (this.debugging) {
+            debugger; // eslint-disable-line no-debugger
+        }
         this.value = value;
         const type = this.type(value);
         if (supportsIterator
@@ -180,6 +184,16 @@ class Prop {
      */
     error(msg) {
         throw new Error(msg);
+    }
+
+    /**
+     * Turn debugging mode on and off
+     *
+     * @param {Boolean} debug
+     * @api public
+     */
+    debug(debug = true) {
+        this.debugging = debug;
     }
 
     /**
