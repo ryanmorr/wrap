@@ -25,7 +25,6 @@ class Prop {
      * @api public
      */
     constructor(value) {
-        this.listeners = [];
         this.set(value);
     }
 
@@ -44,7 +43,9 @@ class Prop {
                 && (type === 'array' || type === 'object')) {
                 this[Symbol.iterator] = getIterator(this.value, type);
             }
-            this.listeners.forEach((fn) => fn(this.value));
+            if ('listeners' in this) {
+                this.listeners.forEach((fn) => fn(this.value));
+            }
         }
     }
 
@@ -119,6 +120,9 @@ class Prop {
      * @api public
      */
     observe(fn) {
+        if (!('listeners' in this)) {
+            this.listeners = [];
+        }
         this.listeners.push(fn);
     }
 
