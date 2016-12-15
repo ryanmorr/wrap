@@ -151,4 +151,26 @@ describe('prop', () => {
         expect(Number(foo)).to.equal(code);
         expect(foo + 0).to.equal(code);
     });
+
+    it('should support the iterable protocol if the internal variable is an array', () => {
+        let i = 0;
+        const array = [1, 2, 3];
+        const foo = prop(array);
+        expect(Symbol.iterator in foo).to.equal(true);
+        for (const value of foo) {
+            expect(value).to.equal(array[i++]);
+        }
+    });
+
+    it('should support the iterable protocol if the internal variable is an object', () => {
+        let i = 0;
+        const obj = {foo: 1, bar: 2, baz: 3};
+        const keys = Object.keys(obj);
+        const foo = prop(obj);
+        expect(Symbol.iterator in foo).to.equal(true);
+        for (const [key, value] of foo) {
+            expect(key).to.equal(keys[i]);
+            expect(value).to.equal(obj[keys[i++]]);
+        }
+    });
 });

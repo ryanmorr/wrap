@@ -2,6 +2,7 @@
  * Common variables
  */
 const toString = {}.toString;
+const supportsIterator = typeof Symbol === 'function' && Symbol.iterator;
 
 /**
  * Get the internal [[Class]] of an object
@@ -65,8 +66,8 @@ class Prop {
      * @api public
      */
     constructor(value) {
-        this.value = value;
         this.listeners = [];
+        this.set(value);
     }
 
     /**
@@ -78,6 +79,29 @@ class Prop {
     set(...args) {
         if (args.length) {
             this.value = args[0];
+            const type = this.type(this.value);
+            if (supportsIterator && (type === 'array' || type === 'object')) {
+                this[Symbol.iterator] = () => {
+                    const value = this.value;
+                    const items = type === 'array' ? value : Object.keys(value);
+                    const length = items.length;
+                    let index = 0;
+                    return {
+                        next() {
+                            if (index < length) {
+                                if (type === 'array') {
+                                    return {value: items[index++]};
+                                } else {
+                                    const key = items[index++];
+                                    return {value: [key, value[key]]};
+                                }
+                            } else {
+                                return {done: true};
+                            }
+                        }
+                    };
+                }
+            }
             this.listeners.forEach((fn) => fn(this.value));
         }
     }
