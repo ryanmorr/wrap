@@ -58,6 +58,9 @@ class Wrapper {
      * @api public
      */
     get() {
+        if (this.debugging) {
+            debugger; // eslint-disable-line no-debugger
+        }
         return this.value;
     }
 
