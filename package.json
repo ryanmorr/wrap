@@ -1,10 +1,10 @@
 {
-  "name": "prop",
+  "name": "wrap",
   "description": "Variable wrapper utility",
   "version": "0.1.0",
   "license": "Unlicense",
-  "homepage": "https://github.com/ryanmorr/prop",
-  "main": "dist/prop.min.js",
+  "homepage": "https://github.com/ryanmorr/wrap",
+  "main": "dist/wrap.min.js",
   "author": {
     "name": "Ryan Morr",
     "email": "rm.morr@gmail.com",
@@ -12,10 +12,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/ryanmorr/prop.git"
+    "url": "git://github.com/ryanmorr/wrap.git"
   },
   "bugs": {
-    "url": "https://github.com/ryanmorr/prop/issues"
+    "url": "https://github.com/ryanmorr/wrap/issues"
   },
   "devDependencies": {
     "babel-core": "^6.11.4",

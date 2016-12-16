@@ -12,10 +12,10 @@ const supportsIterator = typeof Symbol === 'function' && Symbol.iterator;
  * Helper class that wraps a variable to provide
  * abstracted utilities
  *
- * @class Prop
+ * @class Wrapper
  * @api public
  */
-class Prop {
+class Wrapper {
 
     /**
      * Instantiate the class and provide
@@ -225,9 +225,9 @@ class Prop {
  * utilities
  *
  * @param {*} value (optional)
- * @return {Prop}
+ * @return {Wrapper}
  * @api public
  */
-export default function prop(value) {
-    return new Prop(value);
+export default function wrap(value) {
+    return new Wrapper(value);
 }

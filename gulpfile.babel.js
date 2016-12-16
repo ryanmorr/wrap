@@ -15,10 +15,10 @@ import buffer from 'vinyl-buffer';
 const banner = '/*! ${pkg.name} v${pkg.version} | ${pkg.homepage} */\n';
 
 const config = {
-    name: 'prop',
+    name: 'wrap',
     files: './src/**/*.js',
-    entryFile: './src/prop.js',
-    outputFile: 'prop.js',
+    entryFile: './src/wrap.js',
+    outputFile: 'wrap.js',
     outputDir: './dist/',
     specs: './test/*.js'
 };
